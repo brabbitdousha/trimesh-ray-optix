@@ -3,18 +3,18 @@
 Triro is a mesh ray tracing library implemented with NVIDIA OptiX. It has compatible interface with [trimesh.ray](https://trimesh.org/trimesh.ray.html) and provides other convenient functions.
 
 ## 🔧️ Installation
-You need an OptiX SDK (>=7) installed to get to use Triro. If you are running Windows you also need an MSVC installation. First
+You need an OptiX SDK (7.7 works well) installed to get to use Triro. If you are running Windows you also need an MSVC installation. First
 ```sh
 # if you are running in Windows set the system variable
 export OptiX_INSTALL_DIR=<Your Optix SDK installation directory>
 ```
 Then
 ```sh
-pip install git+https://github.com/lcp29/trimesh-ray-optix
+pip install git+https://github.com/brabbitdousha/trimesh-ray-optix
 ```
 or
 ```sh
-git clone https://github.com/lcp29/trimesh-ray-optix
+git clone https://github.com/brabbitdousha/trimesh-ray-optix
 cd trimesh-ray-optix
 pip install .
 ```

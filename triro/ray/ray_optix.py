@@ -100,24 +100,15 @@ class RayMeshIntersector:
         self,
         origins: Float32[torch.Tensor, "*b 3"],
         directions: Float32[torch.Tensor, "*b 3"],
-        stream_compaction: bool = False,
-    ) -> (
-        Tuple[
-            Bool[torch.Tensor, "*b"],  # hit
-            Bool[torch.Tensor, "*b"],  # front
-            Int32[torch.Tensor, "*b"],  # triangle index
-            Float32[torch.Tensor, "*b 3"],  # intersect location
-            Float32[torch.Tensor, "*b 2"],  # uv
-        ]
-        | Tuple[
+        stream_compaction: bool = True,
+    ) -> Tuple[
             Bool[torch.Tensor, "*b"],  # hit
             Bool[torch.Tensor, "h"],  # front
             Int32[torch.Tensor, "h"],  # ray index
             Int32[torch.Tensor, "h"],  # triangle index
             Float32[torch.Tensor, "h 3"],  # intersect location
             Float32[torch.Tensor, "h 2"],  # uv:
-        ]
-    ):
+        ]:
         """
         Find the closest intersection for each ray.
 
@@ -145,11 +136,11 @@ class RayMeshIntersector:
         hit, front, tri_idx, loc, uv = hops.intersects_closest(
             self.as_wrapper, origins, directions
         )
-        if stream_compaction:
-            ray_idx = torch.arange(0, hit.shape.numel()).cuda().int()[hit.reshape(-1)]
-            return hit, front[hit], ray_idx, tri_idx[hit], loc[hit], uv[hit]
-        else:
-            return hit, front, tri_idx, loc, uv
+        #if stream_compaction:
+        ray_idx = torch.arange(0, hit.shape.numel()).cuda().int()[hit.reshape(-1)]
+        return hit, front[hit], ray_idx, tri_idx[hit], loc[hit], uv[hit]
+        #else:
+        #    return hit, front, tri_idx, loc, uv
 
     def intersects_location(
         self,
@@ -194,18 +185,13 @@ class RayMeshIntersector:
         self,
         origins: Float32[torch.Tensor, "*b 3"],
         directions: Float32[torch.Tensor, "*b 3"],
-        return_locations: bool = False,
+        return_locations: bool = True,
         multiple_hits: bool = True,
-    ) -> (
-        Tuple[
+    ) ->Tuple[
             Int32[torch.Tensor, "h"],  # hit triangle indices
             Int32[torch.Tensor, "h"],  # ray indices
             Float32[torch.Tensor, "h 3"],  # hit location
-        ]
-        | Tuple[
-            Int32[torch.Tensor, "h"], Int32[torch.Tensor, "h"]
-        ]  # hit triangle indices and ray indices
-    ):
+        ]:
         """
         Find the intersection indices for each ray.
 
@@ -226,19 +212,13 @@ class RayMeshIntersector:
             loc, ray_idx, tri_idx = hops.intersects_location(
                 self.as_wrapper, origins, directions
             )
-            if return_locations:
-                return tri_idx, ray_idx, loc
-            else:
-                return tri_idx, ray_idx
+            return tri_idx, ray_idx, loc
         else:
             hit, _, tri_idx, loc, _ = hops.intersects_closest(
                 self.as_wrapper, origins, directions
             )
             ray_idx = torch.arange(0, hit.shape.numel()).cuda().int()[hit.reshape(-1)]
-            if return_locations:
-                return tri_idx[hit], ray_idx, loc[hit]
-            else:
-                return tri_idx[hit], ray_idx
+            return tri_idx[hit], ray_idx, loc[hit]
 
     def contains_points(
         self,

@@ -29,9 +29,9 @@ class RayMeshIntersector:
         self.mesh_raw = mesh
         # mesh vertices
         # [n, 3] float32 on the device
-        self.mesh_vertices = torch.from_numpy(mesh[0]).float().contiguous().cuda()
+        self.mesh_vertices = mesh[0].float().contiguous()
         # [n, 3] int32 on the device
-        self.mesh_faces = torch.from_numpy(mesh[1]).int().contiguous().cuda()
+        self.mesh_faces = mesh[1].int().contiguous()
         # ([3], [3])
         self.mesh_aabb = (
             torch.min(self.mesh_vertices, dim=0)[0],

@@ -1,4 +1,4 @@
-# This branch is little different from the original branch.
+# This branch is a little different from the original branch.
 
 # Triro - A Python Ray-Mesh Intersector in OptiX
 

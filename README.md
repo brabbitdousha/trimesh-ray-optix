@@ -1,3 +1,5 @@
+# This branch is little different from the original branch.
+
 # Triro - A Python Ray-Mesh Intersector in OptiX
 
 Triro is a mesh ray tracing library implemented with NVIDIA OptiX. It has compatible interface with [trimesh.ray](https://trimesh.org/trimesh.ray.html) and provides other convenient functions.
@@ -27,7 +29,7 @@ from triro.ray.ray_optix import RayMeshIntersector
 
 # creating mesh and intersector
 mesh = trimesh.creation.icosphere()
-intersector = RayMeshIntersector(mesh)
+intersector = RayMeshIntersector((mesh.vertices, mesh.faces))
 
 # generating rays
 y, x = torch.meshgrid([torch.linspace(1, -1, 800), 

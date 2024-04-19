@@ -18,20 +18,19 @@ class RayMeshIntersector:
         mesh (trimesh.Trimesh): The mesh to be used for intersection tests.
     """
 
-    def __init__(self, mesh):
+    def __init__(self, vt, v_ind):
         """
         Initialize the RayMeshIntersector class.
 
         Args:
             mesh (trimesh.Trimesh): The mesh to be used for intersection tests.
         """
-        # original mesh on the host memory
-        self.mesh_raw = mesh
         # mesh vertices
         # [n, 3] float32 on the device
-        self.mesh_vertices = mesh[0].float().contiguous()
+        
+        self.mesh_vertices = vt.contiguous()
         # [n, 3] int32 on the device
-        self.mesh_faces = mesh[1].int().contiguous()
+        self.mesh_faces = v_ind.contiguous()
         # ([3], [3])
         self.mesh_aabb = (
             torch.min(self.mesh_vertices, dim=0)[0],

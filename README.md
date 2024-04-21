@@ -29,7 +29,9 @@ from triro.ray.ray_optix import RayMeshIntersector
 
 # creating mesh and intersector
 mesh = trimesh.creation.icosphere()
-intersector = RayMeshIntersector((mesh.vertices, mesh.faces))
+vrt = torch.from_numpy(mesh.vertices).cuda().float()
+v_ind = torch.from_numpy(mesh.faces).cuda().int()
+intersector = RayMeshIntersector(vrt, v_ind)
 
 # generating rays
 y, x = torch.meshgrid([torch.linspace(1, -1, 800), 
